@@ -1,7 +1,8 @@
 require 'socket'
 
-host = "loclhost"
+host = "localhost"
 port = 4040
+
 server = TCPServer.new(host, port)
 
 @folder = "html/"

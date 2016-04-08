@@ -3,7 +3,21 @@ require 'socket'
 host = "loclhost"
 port = 4040
 server = TCPServer.new(host, port)
+
 @folder = "html/"
+
+CONTENT_TYPES = {
+  'html' => 'text/html',
+  'txt' => 'text/plain',
+  'png' => 'image/png',
+  'jpg' => 'image/jpeg'
+}
+
+def what_type(file_name)
+  ext = File.extname(file_name)
+  ext = ext.sub(/^./, '')
+  return CONTENT_TYPES.fetch(ext)
+end
 
 def list_files(folder)
   @files = Dir.entries(folder)
@@ -17,6 +31,7 @@ def list_files(folder)
 end
 
 if Dir.entries(@folder).include?('index.html') == true
+  @content_type = "text/html"
   @content = File.read("#{@folder}/index.html")
 else
   list_files(@folder)

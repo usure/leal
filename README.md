@@ -5,8 +5,10 @@ leal is a small http server written in ruby. [wip]
 --- todo
   - linking []
   - directory structure []
-  - content-type detector
-  - probably other things
+  - content-type detector [/]
+  - probably other things []
+  
+
 ### dependencies
 
 * nothing

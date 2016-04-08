@@ -1,6 +1,8 @@
 require 'socket'
 
-server = TCPServer.new('localhost', 4040)
+host = "loclhost"
+port = 4040
+server = TCPServer.new(host, port)
 @folder = "html/"
 
 def list_files(folder)

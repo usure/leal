@@ -8,12 +8,26 @@ port = 4040
 
 CONTENT_TYPES = {
   'html' => 'text/html',
+  'sh' => 'application/x-sh',
   'txt' => 'text/plain',
+  'js'  => 'application/javascript',
   'gif' => 'image/gif',
   'png' => 'image/png',
   'jpg' => 'image/jpeg',
+  'weba' => 'audio/webm',
+  'webm' => 'video/webm',
+  'mp3' => 'audio/mpeg',
+  'ogg' => 'application/ogg',
+  'zip' => 'application/zip',
+  'rar' => 'application/x-rar-compressed',
+  'deb' => 'application/x-debian-package',
+  'tar' => 'application/x-tar',
+  'bz2' => 'application/x-bzip2',
+  'bz'  => 'application/x-bzip',
+  'xml' => 'application/xml',
   'pdf' => 'application/pdf'
 }
+
 
 def what_type(file_name)
   ext = File.extname(file_name)
@@ -57,9 +71,19 @@ loop do
                      "Content-Length: #{file.size}\r\n" +
                      "Connection: close\r\n"
        socket.print "\r\n"
-       #socket.print(file)
        IO.copy_stream(file, socket)
      end
+   elsif File.file?(@root + "/index.html") == true
+       File.open("#{@root}/index.html", "rb") do |file|
+         puts what_type(file)
+         puts file.size
+         socket.print "HTTP/1.1 200 OK\r\n" +
+                       "Content-Type: #{what_type(file)}\r\n" +
+                       "Content-Length: #{file.size}\r\n" +
+                       "Connection: close\r\n"
+         socket.print "\r\n"
+         IO.copy_stream(file, socket)
+         end
      else
        message = %q( <html lang="en">
         <head>
@@ -78,14 +102,11 @@ loop do
                      "Connection: close\r\n"
 
         socket.print "\r\n"
-
         socket.print message
       end
       socket.close
     end
-end
-
-
+  end
 
 #def list_files(folder)
 #  @files = Dir.entries(folder)
@@ -96,11 +117,4 @@ end
 #    @content << "<br><a href='#{i}'>#{i}</a>\n"
 #  end
 #  puts @content
-#end
-
-#if Dir.entries(@folder).include?('index.html') == true
-#  @content_type = "text/html"
-#  @content = File.read("#{@folder}/index.html")
-#else
-#  list_files(@folder)
 #end

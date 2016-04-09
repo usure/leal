@@ -72,12 +72,12 @@ def requested_file(request_line)
     next if part.empty? || part == '.'
     part == '..' ? clean.pop : clean << part
   end
-  File.join(@root, *clean) 
+  File.join(@root, *clean)
 end
 
 server = TCPServer.new(host, port)
+puts "server started at #{host}:#{port}" # not exact
 loop do
-
   Thread.start(server.accept) do |socket|
    request_line = socket.gets
    log(request_line)

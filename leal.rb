@@ -117,6 +117,7 @@ loop do
        puts what_type(file)
        puts file.size
        socket.print "HTTP/1.1 200 OK\r\n" +
+                     "Last-Modified: #{File.mtime(file)}\r\n" +
                      "Content-Type: #{what_type(file)}\r\n" +
                      "Content-Length: #{file.size}\r\n" +
                      "Connection: close\r\n"
@@ -128,12 +129,13 @@ loop do
          puts what_type(file)
          puts file.size
          socket.print "HTTP/1.1 200 OK\r\n" +
+                       "Last-Modified: #{File.mtime(file)}\r\n" +
                        "Content-Type: #{what_type(file)}\r\n" +
                        "Content-Length: #{file.size}\r\n" +
                        "Connection: close\r\n"
          socket.print "\r\n"
          IO.copy_stream(file, socket)
-         end
+      end
      elsif File.exist?(path) == false
        puts path
 
@@ -157,7 +159,7 @@ loop do
         socket.print message
       end
 
-      if Dir.entries(@root).size > 2 == true
+      if Dir.entries(@root).size > 2 == true && File.exist?(@root + "/index.html") == false #### FIX THIS
           list_files(@root)
           socket.print "HTTP/1.1 200 OK\r\n" +
                        "Content-Type: text/html\r\n" +

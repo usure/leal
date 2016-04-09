@@ -117,6 +117,7 @@ loop do
        puts what_type(file)
        puts file.size
        socket.print "HTTP/1.1 200 OK\r\n" +
+                     "Date: #{File.ctime(file)}\r\n" +
                      "Last-Modified: #{File.mtime(file)}\r\n" +
                      "Content-Type: #{what_type(file)}\r\n" +
                      "Content-Length: #{file.size}\r\n" +
@@ -129,6 +130,7 @@ loop do
          puts what_type(file)
          puts file.size
          socket.print "HTTP/1.1 200 OK\r\n" +
+                       "Date: #{File.ctime(file)}\r\n" +
                        "Last-Modified: #{File.mtime(file)}\r\n" +
                        "Content-Type: #{what_type(file)}\r\n" +
                        "Content-Length: #{file.size}\r\n" +
@@ -161,6 +163,8 @@ loop do
       if Dir.entries(@root).size > 2 == true && File.exist?(@root + "/index.html") == false
           list_files(@root)
           socket.print "HTTP/1.1 200 OK\r\n" +
+                       "Date: #{DateTime.now().to_s}\r\n" +
+                       "Last-Modified: #{DateTime.now().to_s}}\r\n" +
                        "Content-Type: text/html\r\n" +
                        "Content-Length: #{@message.size}\r\n" +
                        "Connection: close\r\n"

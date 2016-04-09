@@ -158,8 +158,7 @@ loop do
         socket.print "\r\n"
         socket.print message
       end
-
-      if Dir.entries(@root).size > 2 == true && File.exist?(@root + "/index.html") == false #### FIX THIS
+      if Dir.entries(@root).size > 2 == true && File.exist?(@root + "/index.html") == false
           list_files(@root)
           socket.print "HTTP/1.1 200 OK\r\n" +
                        "Content-Type: text/html\r\n" +

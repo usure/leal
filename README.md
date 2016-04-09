@@ -2,11 +2,13 @@
 
 leal is a small http server written in ruby. [wip]
 
--- todo
+--- todo
   - linking [x]
   - directory structure [x]
   - content-type detector [x]
   - serve up "index.html" if it exists [x]
+  - directory listing [x]
+  - make POST work []
   - probably other things []
   
 

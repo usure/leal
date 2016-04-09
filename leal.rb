@@ -1,9 +1,11 @@
 require 'socket'
+require 'date'
 require 'uri'
 
 host = "localhost"
 port = 4040
 
+@log_file = "server.log"
 @root = './html'
 
 CONTENT_TYPES = {
@@ -27,6 +29,13 @@ CONTENT_TYPES = {
   'xml' => 'application/xml',
   'pdf' => 'application/pdf'
 }
+
+def log(something)
+  file = IO.sysopen @log_file, "a+"
+  ios = IO.new(file, "a+")
+  ios.puts(something)
+  ios.close
+end
 
 def list_files(folder)
   @message = """<html><head>
@@ -58,15 +67,12 @@ def requested_file(request_line)
   request_uri  = request_line.split(" ")[1]
   path         = URI.unescape(URI(request_uri).path)
   clean = []
-  parts = path.split("/")   # Split the path into components
-  parts.each do |part| # skip any empty or current directory (".") path components
+  parts = path.split("/")
+  parts.each do |part|
     next if part.empty? || part == '.'
-   # If the path component goes up one directory level (".."),
-   # remove the last clean component.
-   # Otherwise, add the component to the Array of clean components
     part == '..' ? clean.pop : clean << part
   end
-  File.join(@root, *clean) # return the web root joined to the clean path
+  File.join(@root, *clean) 
 end
 
 server = TCPServer.new(host, port)
@@ -74,9 +80,13 @@ loop do
 
   Thread.start(server.accept) do |socket|
    request_line = socket.gets
-   STDERR.puts request_line
+   log(request_line)
+   #STDERR.puts request_line
    path = requested_file(request_line)
-   puts path
+   log(path + " #{DateTime.now().to_s}")
+   #puts path
+   #remote_port, remote_hostname, remote_ip = socket.peeraddr
+   log("#{socket.peeraddr[3]}:#{socket.peeraddr[1]} #{DateTime.now().to_s}")
    if File.exist?(path) && !File.directory?(path)
      File.open(path, "rb") do |file|
        puts what_type(file)

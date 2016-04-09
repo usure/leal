@@ -9,14 +9,21 @@ port = 4040
 CONTENT_TYPES = {
   'html' => 'text/html',
   'txt' => 'text/plain',
+  'gif' => 'image/gif',
   'png' => 'image/png',
-  'jpg' => 'image/jpeg'
+  'jpg' => 'image/jpeg',
+  'pdf' => 'application/pdf'
 }
 
 def what_type(file_name)
   ext = File.extname(file_name)
   ext = ext.sub(/^./, '')
-  return CONTENT_TYPES.fetch(ext)
+
+  if CONTENT_TYPES.has_key?(ext) == false
+    return 'application/octet-stream'
+  else
+    return CONTENT_TYPES.fetch(ext)
+  end
 end
 
 def requested_file(request_line)

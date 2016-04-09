@@ -22,7 +22,9 @@ leal is a small http server written in ruby. [wip]
 (store the files you want to serve up in a directory named "html")
 (before running these commands please change the "host" & "port" values to your liking in leal.rb)
 ```
-$ ruby leal.rb # run this command
+$ ruby leal.rb # run this command or
+$ ruby leal.rb -h $HOSTNAME -p $PORT -l [$LOG_FILE or none] run this command
+$ ruby leal -h # for help
 ```
 ### license
 ![](http://i.imgur.com/HdsLqoL.png)

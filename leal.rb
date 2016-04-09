@@ -43,6 +43,17 @@ CONTENT_TYPES = {
   'pdf' => 'application/pdf'
 }
 
+RESPONSE_CODES = { ########################## UNUSED. KEEP AS PLACEHOLDER
+  404 => 'Not Found',
+  200 => 'OK',
+  201 => 'Created',
+  301 => 'Moved Permanently',
+  400 => 'Bad Request',
+  402 => 'Payment Required',
+  429 => 'Too Many Request',
+  451 => 'Unavailable For Legal Reasons'
+}
+
 def log(something)
   file = IO.sysopen @log_file, "a+"
   ios = IO.new(file, "a+")
@@ -111,7 +122,7 @@ loop do
        socket.print "\r\n"
        IO.copy_stream(file, socket)
      end
-   elsif File.file?(@root + "/index.html") == true
+   elsif File.file?(@root + "/index.html") == true && !File.exist?(path) == false
        File.open("#{@root}/index.html", "rb") do |file|
          puts what_type(file)
          puts file.size
@@ -122,17 +133,9 @@ loop do
          socket.print "\r\n"
          IO.copy_stream(file, socket)
          end
-   elsif Dir.entries(@root).size > 2 == true
-       list_files(@root)
-       socket.print "HTTP/1.1 404 Not Found\r\n" +
-                    "Content-Type: text/html\r\n" +
-                    "Content-Length: #{@message.size}\r\n" +
-                    "Connection: close\r\n"
+     elsif File.exist?(path) == false
+       puts path
 
-       socket.print "\r\n"
-       socket.print @message
-
-       else
        message = %q( <html lang="en">
         <head>
          <title>404 - Not Found</title>
@@ -152,6 +155,17 @@ loop do
         socket.print "\r\n"
         socket.print message
       end
+
+      if Dir.entries(@root).size > 2 == true
+          list_files(@root)
+          socket.print "HTTP/1.1 200 OK\r\n" +
+                       "Content-Type: text/html\r\n" +
+                       "Content-Length: #{@message.size}\r\n" +
+                       "Connection: close\r\n"
+
+          socket.print "\r\n"
+          socket.print @message
+        end
       socket.close
     end
   end

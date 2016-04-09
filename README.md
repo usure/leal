@@ -9,7 +9,7 @@ leal is a small http server written in ruby. [wip]
   - serve up "index.html" if it exists [x]
   - directory listing [x]
   - logging functionality [x]
-  - command line interface [x]
+  - command line interface (optparse) [x]
   - make POST work []
   - probably other things []
   

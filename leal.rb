@@ -1,12 +1,25 @@
+#!/usr/bin/env ruby
+#/ Usage: <leal> [-h][-p] [-l] [--f]
+$stderr.sync = true
+require 'optparse'
 require 'socket'
 require 'date'
 require 'uri'
 
 host = "localhost"
 port = 4040
-
 @log_file = "server.log"
 @root = './html'
+
+file = __FILE__
+ARGV.options do |opts|
+  opts.on("-h", "--hostname=val", String)   { |val| host = val }
+  opts.on("-p", "--port=val", Integer)     { |val| port = val }
+  opts.on("-l", "--log=val", String)     { |val| if val == "none" then @log_file = nil else @log_file = val end }
+  opts.on("-f", "--folder=val", String) {|val| @root = val}
+  opts.on_tail("--help")         { exec "grep ^#/<'#{file}'|cut -c4-" }
+  opts.parse!
+end
 
 CONTENT_TYPES = {
   'html' => 'text/html',
@@ -139,7 +152,6 @@ loop do
         socket.print "\r\n"
         socket.print message
       end
-
       socket.close
     end
   end

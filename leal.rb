@@ -42,12 +42,6 @@ def list_files(folder)
   @message << "</pre></body></html>"
   return @message
 end
-#def list_files(folder)
-#  files = Dir["#{folder}"]
-#  for i in files do
-#  return "<br><a href='#{i}'>#{i}</a>\n"
-#  end
-#end
 
 def what_type(file_name)
   ext = File.extname(file_name)
@@ -139,14 +133,3 @@ loop do
       socket.close
     end
   end
-
-#def list_files(folder)
-#  @files = Dir.entries(folder)
-#  @files -= %w{.. .}
-#  @content = "Directory Index\n"
-#  puts @files
-#  for i in @files do
-#    @content << "<br><a href='#{i}'>#{i}</a>\n"
-#  end
-#  puts @content
-#end

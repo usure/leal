@@ -50,6 +50,7 @@ RESPONSE_CODES = { ########################## UNUSED. KEEP AS PLACEHOLDER
   301 => 'Moved Permanently',
   400 => 'Bad Request',
   402 => 'Payment Required',
+  403 => 'Forbidden',
   429 => 'Too Many Request',
   451 => 'Unavailable For Legal Reasons'
 }

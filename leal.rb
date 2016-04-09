@@ -28,6 +28,26 @@ CONTENT_TYPES = {
   'pdf' => 'application/pdf'
 }
 
+def list_files(folder)
+  @message = """<html><head>
+ <title>Index of #{folder}</title>
+ </head>
+ <body>
+ <br><b>Index of #{folder}</b>"""
+  Dir.foreach(folder) do |item|
+    next if item == '.' or item == '..'
+    l_mtime = File.mtime("#{folder}/#{item}").to_s
+    @message << "<br><a href='#{item}'>#{item}</a> <i>#{l_mtime}</i>\n"
+  end
+  @message << "</pre></body></html>"
+  return @message
+end
+#def list_files(folder)
+#  files = Dir["#{folder}"]
+#  for i in files do
+#  return "<br><a href='#{i}'>#{i}</a>\n"
+#  end
+#end
 
 def what_type(file_name)
   ext = File.extname(file_name)
@@ -57,6 +77,7 @@ end
 
 server = TCPServer.new(host, port)
 loop do
+
   Thread.start(server.accept) do |socket|
    request_line = socket.gets
    STDERR.puts request_line
@@ -84,7 +105,17 @@ loop do
          socket.print "\r\n"
          IO.copy_stream(file, socket)
          end
-     else
+   elsif Dir.entries(@root).size > 2 == true
+       list_files(@root)
+       socket.print "HTTP/1.1 404 Not Found\r\n" +
+                    "Content-Type: text/html\r\n" +
+                    "Content-Length: #{@message.size}\r\n" +
+                    "Connection: close\r\n"
+
+       socket.print "\r\n"
+       socket.print @message
+
+       else
        message = %q( <html lang="en">
         <head>
          <title>404 - Not Found</title>
@@ -104,6 +135,7 @@ loop do
         socket.print "\r\n"
         socket.print message
       end
+
       socket.close
     end
   end

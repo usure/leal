@@ -3,15 +3,15 @@
 leal is a small http server written in ruby. [wip]
 
 --- todo
-  - linking [x]
-  - directory structure [x]
-  - content-type detector [x]
-  - serve up "index.html" if it exists [x]
-  - directory listing [x]
-  - logging functionality [x]
-  - command line interface (optparse) [x]
-  - make POST work []
-  - probably other things []
+  * [x] linking 
+  * [x] directory structure 
+  * [x] content-type detector 
+  * [x] serve up "index.html" if it exists 
+  * [x] directory listing 
+  * [x] logging functionality
+  * [x] command line interface (optparse) 
+  * [ ] make POST work
+  * [ ] probably other things
   
 
 ### dependencies

@@ -21,11 +21,19 @@ ARGV.options do |opts|
   opts.parse!
 end
 
+def get_post(request)
+request = request.split(',').split(' ')
+ ["POST /path/script.cgi HTTP/1.0"]
+  if request[0] == "POST"
+       puts request[1]
+  end
+end
 CONTENT_TYPES = {
   'html' => 'text/html',
   'sh' => 'application/x-sh',
   'txt' => 'text/plain',
   'js'  => 'application/javascript',
+#  'php'  => 'application/x-php', # not sure if this is needed. im keeping this here just in case
   'gif' => 'image/gif',
   'png' => 'image/png',
   'jpg' => 'image/jpeg',
@@ -60,6 +68,11 @@ def log(something)
   ios = IO.new(file, "a+")
   ios.puts(something)
   ios.close
+end
+
+def run_php(file)
+  @output = `php5-cgi -f #{file}`
+  return @output
 end
 
 def list_files(folder)
@@ -112,7 +125,7 @@ loop do
    #puts path
    #remote_port, remote_hostname, remote_ip = socket.peeraddr
    log("#{socket.peeraddr[3]}:#{socket.peeraddr[1]} #{DateTime.now().to_s}")
-   if File.exist?(path) && !File.directory?(path)
+   if File.exist?(path) && !File.directory?(path) && path.include?(".php") == false
      File.open(path, "rb") do |file|
        puts what_type(file)
        puts file.size
@@ -125,6 +138,22 @@ loop do
        socket.print "\r\n"
        IO.copy_stream(file, socket)
      end
+   elsif path.include?(".php") == true
+     puts path
+     run_php(path)
+     size = @output.size
+     log(path)
+     log(size)
+     socket.print "HTTP/1.1 200 OK\r\n" +
+                   "Date: #{DateTime.now().to_s}\r\n" +
+                   "Last-Modified: #{DateTime.now().to_s}}\r\n" +
+                   "Content-Type: text/html\r\n" +
+                   "Content-Length: #{size}\r\n" +
+                   "Connection: close\r\n"
+     socket.print "\r\n"
+     socket.print(@output)
+
+   #end
    elsif File.file?(@root + "/index.html") == true && !File.exist?(path) == false
        File.open("#{@root}/index.html", "rb") do |file|
          puts what_type(file)
@@ -160,6 +189,7 @@ loop do
         socket.print "\r\n"
         socket.print message
       end
+
       if Dir.entries(@root).size > 2 == true && File.exist?(@root + "/index.html") == false
           list_files(@root)
           socket.print "HTTP/1.1 200 OK\r\n" +

@@ -3,21 +3,23 @@
 leal is a small http server written in ruby. [wip]
 
 --- todo
-  * [x] linking 
-  * [x] directory structure 
-  * [x] content-type detector 
-  * [x] serve up "index.html" if it exists 
-  * [x] directory listing 
+  * [x] linking
+  * [x] directory structure
+  * [x] content-type detector
+  * [x] serve up "index.html" if it exists
+  * [x] directory listing
   * [x] logging functionality
-  * [x] command line interface (optparse) 
-  * [ ] php support
+  * [x] command line interface (optparse)
+  * [x] php support (phpinfo works. I doubt POST/GET works with it.)
+  * [ ] inline php support (important)
   * [ ] make POST work
   * [ ] probably other things
-  
+
 
 ### dependencies
 
-* nothing
+* php5 (if you want php support)
+* php5-cgi (THIS IS NEEDED if you want php support)
 
 ### guide
 (store the files you want to serve up in a directory named "html")

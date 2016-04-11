@@ -9,7 +9,7 @@ require 'uri'
 host = "localhost"
 port = 4040
 @log_file = "server.log"
-@root = './html'
+@root = './www'
 
 file = __FILE__
 ARGV.options do |opts|
@@ -21,13 +21,6 @@ ARGV.options do |opts|
   opts.parse!
 end
 
-def get_post(request)
-request = request.split(',').split(' ')
- ["POST /path/script.cgi HTTP/1.0"]
-  if request[0] == "POST"
-       puts request[1]
-  end
-end
 CONTENT_TYPES = {
   'html' => 'text/html',
   'sh' => 'application/x-sh',
@@ -69,6 +62,21 @@ def log(something)
   ios.puts(something)
   ios.close
 end
+
+def get_method(request)
+request = request.split('/')
+  if request[0] == "GET "
+       request = request[1].split('?')
+       @file = request[0]
+       get_request = request[1].gsub(" HTTP", "")
+       @get_request = get_request.split("&")
+       @values = []
+       for i in @get_request do
+         @values << i
+     end
+   end
+ end
+#get_method("GET /post_get.php?field1=value1&field2=value2&field3=value3&field4=value4&field5=value5 HTTP/1.1") #TEST
 
 def run_php(file)
   @output = `php5-cgi -f #{file}`
@@ -119,11 +127,13 @@ loop do
   Thread.start(server.accept) do |socket|
    request_line = socket.gets
    log(request_line)
+  # puts get_method(request_line)
    #STDERR.puts request_line
    path = requested_file(request_line)
    log(path + " #{DateTime.now().to_s}")
    #puts path
    #remote_port, remote_hostname, remote_ip = socket.peeraddr
+   #get_method(request_line)
    log("#{socket.peeraddr[3]}:#{socket.peeraddr[1]} #{DateTime.now().to_s}")
    if File.exist?(path) && !File.directory?(path) && path.include?(".php") == false
      File.open(path, "rb") do |file|
@@ -202,6 +212,7 @@ loop do
           socket.print "\r\n"
           socket.print @message
         end
+
       socket.close
     end
   end

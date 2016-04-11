@@ -1,0 +1,44 @@
+GET /test.php?name=f&age=f HTTP/1.1
+./html/test.php 2016-04-10T14:34:44-04:00
+127.0.0.1:46185 2016-04-10T14:34:44-04:00
+./html/test.php
+240
+GET / HTTP/1.1
+./html 2016-04-10T14:45:30-04:00
+127.0.0.1:59834 2016-04-10T14:45:30-04:00
+GET /index.html HTTP/1.1
+./html/index.html 2016-04-10T14:45:58-04:00
+127.0.0.1:33409 2016-04-10T14:45:58-04:00
+GET /test.php?name=f&age=f HTTP/1.1
+./html/test.php 2016-04-10T14:49:05-04:00
+127.0.0.1:45514 2016-04-10T14:49:05-04:00
+./html/test.php
+240
+
+
+GET /post_get.html HTTP/1.1
+./html/post_get.html 2016-04-10T14:49:27-04:00
+127.0.0.1:46941 2016-04-10T14:49:27-04:00
+GET /post_get.php?name=a HTTP/1.1
+./html/post_get.php 2016-04-10T14:49:29-04:00
+127.0.0.1:46943 2016-04-10T14:49:29-04:00
+./html/post_get.php
+0
+GET /test.php/post_get.php?name=greg HTTP/1.1
+./html/test.php/post_get.php 2016-04-10T14:50:03-04:00
+127.0.0.1:49270 2016-04-10T14:50:03-04:00
+./html/test.php/post_get.php
+25
+GET /post_get.php?name=a HTTP/1.1
+./html/post_get.php 2016-04-10T14:50:10-04:00
+127.0.0.1:49722 2016-04-10T14:50:10-04:00
+./html/post_get.php
+0
+
+
+
+GET /post_get.php?name=greg HTTP/1.1
+./html/post_get.php 2016-04-10T14:50:40-04:00
+127.0.0.1:51670 2016-04-10T14:50:40-04:00
+./html/post_get.php
+0

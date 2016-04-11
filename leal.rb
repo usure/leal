@@ -64,8 +64,6 @@ def log(something)
   ios.close
 end
 
-#get_method("GET /post_get.php?field1=value1&field2=value2&field3=value3&field4=value4&field5=value5 HTTP/1.1") #TEST
-
 def get_method(request)
 @request = request.split('/')
   if @request[0] == "GET "
@@ -188,8 +186,8 @@ loop do
      socket.print(@output)
 
    #end
-   elsif File.file?(@root + "/index.html") == true && !File.exist?(path) == false
-       File.open("#{@root}/index.html", "rb") do |file|
+ elsif File.file?(path + "/index.html") == true && !File.exist?(path) == false
+       File.open("#{path}/index.html", "rb") do |file|
          puts what_type(file)
          puts file.size
          socket.print "HTTP/1.1 200 OK\r\n" +
@@ -224,8 +222,8 @@ loop do
         socket.print message
       end
 
-      if Dir.entries(@root).size > 2 == true && File.exist?(@root + "/index.html") == false
-          list_files(@root)
+      if Dir.entries(path).size > 2 == true && File.exist?(path + "/index.html") == false
+          list_files(path)
           socket.print "HTTP/1.1 200 OK\r\n" +
                        "Date: #{DateTime.now().to_s}\r\n" +
                        "Last-Modified: #{DateTime.now().to_s}}\r\n" +

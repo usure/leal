@@ -11,6 +11,7 @@ leal is a small http server written in ruby. [wip]
   * [x] logging functionality
   * [x] command line interface (optparse)
   * [x] php support (phpinfo works. I doubt POST/GET works with it.)
+  * [x] make GET with forms work
   * [ ] inline php support (important)
   * [ ] make POST work
   * [ ] probably other things

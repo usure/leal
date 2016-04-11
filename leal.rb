@@ -10,6 +10,7 @@ host = "localhost"
 port = 4040
 @log_file = "server.log"
 @root = './www'
+@values = []
 
 file = __FILE__
 ARGV.options do |opts|
@@ -63,10 +64,12 @@ def log(something)
   ios.close
 end
 
+#get_method("GET /post_get.php?field1=value1&field2=value2&field3=value3&field4=value4&field5=value5 HTTP/1.1") #TEST
+
 def get_method(request)
-request = request.split('/')
-  if request[0] == "GET "
-       request = request[1].split('?')
+@request = request.split('/')
+  if @request[0] == "GET "
+       request = @request[1].split('?')
        @file = request[0]
        get_request = request[1].gsub(" HTTP", "")
        @get_request = get_request.split("&")
@@ -76,13 +79,23 @@ request = request.split('/')
      end
    end
  end
-#get_method("GET /post_get.php?field1=value1&field2=value2&field3=value3&field4=value4&field5=value5 HTTP/1.1") #TEST
 
 def run_php(file)
-  @output = `php5-cgi -f #{file}`
-  return @output
+  if @request.empty? == true || @request == [""] || @request == [" "] || @request.any? { |s| s.include?('?') } == false
+    puts true
+    @output = `php5-cgi -f #{file}`
+  else
+    puts false
+    @args = ''
+    for i in 0..@values.count
+    @args << ("#{@values[i]}")
+    end
+    @output = `php5-cgi -f #{file} #{@args}`
+  end
+  #return @output
 end
 
+#php5-cgi -f post_get.php name=gre
 def list_files(folder)
   @message = """<html><head>
  <title>Index of #{folder}</title>
@@ -150,7 +163,18 @@ loop do
      end
    elsif path.include?(".php") == true
      puts path
-     run_php(path)
+     if request_line.include?("?") == true
+      #puts true
+      #puts request_line
+      get_method(request_line)
+    #  puts @values
+      run_php("www/post_get.php")
+     else
+      # puts false
+       run_php(path)
+     end
+    # get_method(request_line)
+     #run_php(path)
      size = @output.size
      log(path)
      log(size)

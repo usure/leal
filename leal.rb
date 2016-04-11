@@ -88,7 +88,7 @@ def run_php(file)
     puts false
     @args = ''
     for i in 0..@values.count
-    @args << ("#{@values[i]}")
+    @args << (" #{@values[i]}")
     end
     @output = `php5-cgi -f #{file} #{@args}`
   end
